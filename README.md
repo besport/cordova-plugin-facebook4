@@ -23,7 +23,7 @@ The Facebook plugin for [Apache Cordova](http://cordova.apache.org/) allows you 
 ## Compatibility
 
   * Cordova >= 5.0.0
-  * cordova-android >= 4.0
+  * cordova-android >= 4.0 (see Android Guide for cordova-android >= 7)
   * cordova-ios >= 3.8
   * cordova-browser >= 3.6
   * Phonegap build (use phonegap-version >= cli-5.2.0, android-minSdkVersion>=15, and android-build-tool=gradle), see [example here](https://github.com/yoav-zibin/phonegap-tictactoe/blob/gh-pages/www/config.xml)
@@ -64,6 +64,14 @@ Failure function returns an error String.
 
 `facebookConnectPlugin.logout(Function success, Function failure)`
 
+### Check permissions (iOS only)
+
+`facebookConnectPlugin.checkHasCorrectPermissions(Array strings of permissions, Function success, Function failure)`
+
+Success function returns a success string if all passed permissions are granted.
+
+Failure function returns an error String if any passed permissions are not granted.
+
 ### Get Status
 
 `facebookConnectPlugin.getLoginStatus(Function success, Function failure)`
@@ -96,11 +104,16 @@ Share Dialog:
 		href: "http://example.com",
 		caption: "Such caption, very feed.",
 		description: "Much description",
-		picture: 'http://example.com/image.png'
+		picture: 'http://example.com/image.png',
+		hashtag: '#myHashtag',
 		share_feedWeb: true, // iOS only
 	}
 
-For iOS, the default dialog mode is [`FBSDKShareDialogModeAutomatic`](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/). You can share that by adding a specific dialog mode parameter. The available share dialog modes are: `share_sheet`, `share_feedBrowser`, `share_native` and `share_feedWeb`. [Read more about share dialog modes](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/)
+#### iOS
+
+The default dialog mode is [`FBSDKShareDialogModeAutomatic`](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/). You can share that by adding a specific dialog mode parameter. The available share dialog modes are: `share_sheet`, `share_feedBrowser`, `share_native` and `share_feedWeb`. [Read more about share dialog modes](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/)
+
+`caption`, `description` and `picture` were deprecated in Facebok API [v2.9](https://developers.facebook.com/docs/graph-api/changelog/version2.9#gapi-deprecate) and therefore not supported anymore on iOS 
 
 Game request:
 
@@ -205,45 +218,6 @@ Events are listed on the [insights page](https://www.facebook.com/insights/)
 ### Manually log activation events
 
 `activateApp(Function success, Function failure)`
-
-### App Invites
-
-`facebookConnectPlugin.appInvite(Object options, Function success, Function failure)`
-
-Please check out the [App Invites Overview](https://developers.facebook.com/docs/app-invites/overview) before using this. The URL is expected to be an [App Link](https://developers.facebook.com/docs/applinks).
-
-Example options:
-
-    {
-      url: "http://example.com",
-      picture: "http://example.com/image.png"
-    }
-
-## Sample Code
-
-```js
-facebookConnectPlugin.appInvite(
-    {
-        url: "http://example.com",
-        picture: "http://example.com/image.png"
-    },
-    function(obj){
-        if(obj) {
-            if(obj.completionGesture == "cancel") {
-                // user canceled, bad guy
-            } else {
-                // user really invited someone :)
-            }
-        } else {
-            // user just pressed done, bad guy
-        }
-    },
-    function(obj){
-        // error
-        console.log(obj);
-    }
-);
-```
 
 ### Login
 
